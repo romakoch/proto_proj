@@ -1,0 +1,189 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator typegraphql {
+  provider           = "typegraphql-prisma"
+  output             = "../prisma/generated/type-graphql"
+  emitTranspiledCode = true
+}
+
+model Manager {
+  id         Int          @id @default(autoincrement())
+  name       String
+  Visit      Visit[]
+  Task       Task[]
+  Route      Route[]
+  TradePoint TradePoint[]
+  RouteDay   RouteDay[]
+}
+
+model Creator {
+  id    Int     @id @default(autoincrement())
+  name  String
+  Visit Visit[]
+  Task  Task[]
+  Route Route[]
+}
+
+model Customer {
+  id         Int          @id @default(autoincrement())
+  name       String
+  TradePoint TradePoint[]
+}
+
+model VisitStatus {
+  id         Int     @id @default(autoincrement())
+  name       String
+  orderBy    Int
+  color      String
+  accessName String
+  Visit      Visit[]
+}
+
+model Visit {
+  id            Int          @id @default(autoincrement())
+  dateIn        DateTime
+  datePlan      DateTime
+  dateStart     DateTime
+  dateEnd       DateTime
+  orderBy       Decimal
+  isUpdate      Int
+  tasks         Task[]
+  Manager       Manager?     @relation(fields: [managerId], references: [id])
+  managerId     Int?
+  Creator       Creator?     @relation(fields: [creatorId], references: [id])
+  creatorId     Int?
+  TradePoint    TradePoint?  @relation(fields: [tradePointId], references: [id])
+  tradePointId  Int?
+  VisitStatus   VisitStatus? @relation(fields: [visitStatusId], references: [id])
+  visitStatusId Int?
+  RouteDay      RouteDay?    @relation(fields: [routeDayId], references: [id])
+  routeDayId    Int?
+}
+
+model TypeOfTask {
+  id         Int    @id @default(autoincrement())
+  name       String
+  orderBy    Int
+  accessName String
+  Task       Task[]
+}
+
+model StatusTask {
+  id         Int    @id @default(autoincrement())
+  name       String
+  orderBy    Int
+  color      String
+  accessName String
+  Task       Task[]
+}
+
+model TaskPrice {
+  id           Int     @id @default(autoincrement())
+  brand        String
+  height       String
+  manufacturer String
+  price        Decimal
+  Task         Task?   @relation(fields: [taskId], references: [id])
+  taskId       Int?
+}
+
+model Task {
+  id           Int         @id @default(autoincrement())
+  name         String
+  description  String
+  datePlan     DateTime
+  Visit        Visit?      @relation(fields: [visitId], references: [id])
+  visitId      Int?
+  Manager      Manager?    @relation(fields: [managerId], references: [id])
+  managerId    Int?
+  status       StatusTask  @relation(fields: [statusTaskId], references: [id])
+  statusTaskId Int
+  Creator      Creator?    @relation(fields: [creatorId], references: [id])
+  creatorId    Int?
+  TypeOfTask   TypeOfTask? @relation(fields: [typeOfTaskId], references: [id])
+  typeOfTaskId Int?
+  TaskPrice    TaskPrice[]
+}
+
+model StatusRouteDay {
+  id         Int        @id @default(autoincrement())
+  name       String
+  orderBy    Int
+  accessName String
+  RouteDay   RouteDay[]
+}
+
+model RouteDay {
+  id               Int             @id @default(autoincrement())
+  dateIn           DateTime
+  isOnlyOne        Int
+  dateStart        DateTime
+  dateEnd          DateTime
+  comment          String
+  isUpdate         Int
+  Route            Route?          @relation(fields: [routeId], references: [id])
+  routeId          Int?
+  StatusRouteDay   StatusRouteDay? @relation(fields: [statusRouteDayId], references: [id])
+  statusRouteDayId Int?
+  Manager          Manager?        @relation(fields: [managerId], references: [id])
+  managerId        Int?
+  Visit            Visit[]
+}
+
+model Route {
+  id        Int        @id @default(autoincrement())
+  name      String
+  dateIn    DateTime
+  dateEnd   DateTime
+  RouteDay  RouteDay[]
+  Manager   Manager?   @relation(fields: [managerId], references: [id])
+  managerId Int?
+  Creator   Creator?   @relation(fields: [creatorId], references: [id])
+  creatorId Int?
+  isDay1    Int
+  isDay2    Int
+  isDay3    Int
+  isDay4    Int
+  isDay5    Int
+  isDay6    Int
+  isDay7    Int
+}
+
+model SalesChannel {
+  id         Int          @id @default(autoincrement())
+  name       String
+  TradePoint TradePoint[]
+}
+
+model TradePoint {
+  id               Int           @id @default(autoincrement())
+  code             Int
+  name             String
+  dayCredit        Int
+  sumCredit        Int
+  dayCreditSc      Int
+  sumCreditSc      Int
+  dayCreditC       Int
+  sumCreditC       Int
+  address          String
+  lat              String
+  lng              String
+  addressGeo       String
+  lastVisitDate    DateTime
+  lastDeliveryDate DateTime
+  Customer         Customer?     @relation(fields: [customerId], references: [id])
+  customerId       Int?
+  SalesChannel     SalesChannel? @relation(fields: [salesChannelId], references: [id])
+  salesChannelId   Int?
+  Manager          Manager?      @relation(fields: [managerId], references: [id])
+  managerId        Int?
+
+  Visit Visit[]
+}
