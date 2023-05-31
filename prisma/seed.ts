@@ -44,6 +44,144 @@ async function seed() {
     },
   });
 
+  // Create SalesChannel
+  const salesChannel1 = await prisma.salesChannel.create({
+    data: {
+      name: "Sales Channel 1",
+    },
+  });
+
+  const salesChannel2 = await prisma.salesChannel.create({
+    data: {
+      name: "Sales Channel 2",
+    },
+  });
+
+  // Create TradePoint
+  const tradePoint1 = await prisma.tradePoint.create({
+    data: {
+      code: 1,
+      name: "Trade Point 1",
+      dayCredit: 7,
+      sumCredit: 1000,
+      dayCreditSc: 10,
+      sumCreditSc: 2000,
+      dayCreditC: 14,
+      sumCreditC: 3000,
+      address: "Address 1",
+      lat: "123.456",
+      lng: "789.012",
+      addressGeo: "Address Geo 1",
+      lastVisitDate: new Date(),
+      lastDeliveryDate: new Date(),
+      customerId: customer1.id,
+      salesChannelId: salesChannel1.id,
+      managerId: manager1.id,
+    },
+  });
+
+  const tradePoint2 = await prisma.tradePoint.create({
+    data: {
+      code: 2,
+      name: "Trade Point 2",
+      dayCredit: 14,
+      sumCredit: 2000,
+      dayCreditSc: 20,
+      sumCreditSc: 3000,
+      dayCreditC: 30,
+      sumCreditC: 4000,
+      address: "Address 2",
+      lat: "456.789",
+      lng: "012.345",
+      addressGeo: "Address Geo 2",
+      lastVisitDate: new Date(),
+      lastDeliveryDate: new Date(),
+      customerId: customer2.id,
+      salesChannelId: salesChannel2.id,
+      managerId: manager2.id,
+    },
+  });
+
+  // Create Route
+  const route1 = await prisma.route.create({
+    data: {
+      name: "Route 1",
+      dateIn: new Date(),
+      dateEnd: new Date(),
+      managerId: manager1.id,
+      creatorId: creator1.id,
+      isDay1: 1,
+      isDay2: 1,
+      isDay3: 1,
+      isDay4: 1,
+      isDay5: 1,
+      isDay6: 1,
+      isDay7: 1,
+    },
+  });
+
+  const route2 = await prisma.route.create({
+    data: {
+      name: "Route 2",
+      dateIn: new Date(),
+      dateEnd: new Date(),
+      managerId: manager2.id,
+      creatorId: creator2.id,
+      isDay1: 0,
+      isDay2: 0,
+      isDay3: 0,
+      isDay4: 0,
+      isDay5: 0,
+      isDay6: 0,
+      isDay7: 0,
+    },
+  });
+
+  const statusRouteDay1 = await prisma.statusRouteDay.create({
+    data: {
+      name: "RouteDay Status 1",
+      orderBy: 1,
+      accessName: "status1",
+    },
+  });
+
+  const statusRouteDay2 = await prisma.statusRouteDay.create({
+    data: {
+      name: "RouteDay Status 1",
+      orderBy: 1,
+      accessName: "status1",
+    },
+  });
+
+  // Create RouteDay
+  const routeDay1 = await prisma.routeDay.create({
+    data: {
+      dateIn: new Date(),
+      isOnlyOne: 1,
+      dateStart: new Date(),
+      dateEnd: new Date(),
+      comment: "Comment 1",
+      isUpdate: 0,
+      routeId: 1,
+      statusRouteDayId: statusRouteDay1.id,
+      managerId: manager1.id,
+    },
+  });
+
+  const routeDay2 = await prisma.routeDay.create({
+    data: {
+      dateIn: new Date(),
+      isOnlyOne: 0,
+      dateStart: new Date(),
+      dateEnd: new Date(),
+      comment: "Comment 2",
+      isUpdate: 1,
+      routeId: 2,
+      statusRouteDayId: statusRouteDay2.id,
+      managerId: manager2.id,
+    },
+  });
+
   // Create VisitStatus
   const visitStatus1 = await prisma.visitStatus.create({
     data: {
@@ -76,7 +214,7 @@ async function seed() {
       creatorId: creator1.id,
       tradePointId: 1,
       visitStatusId: visitStatus1.id,
-      routeDayId: 1,
+      routeDayId: routeDay1.id,
     },
   });
 
@@ -92,7 +230,7 @@ async function seed() {
       creatorId: creator2.id,
       tradePointId: 2,
       visitStatusId: visitStatus2.id,
-      routeDayId: 2,
+      routeDayId: routeDay2.id,
     },
   });
 
@@ -156,128 +294,6 @@ async function seed() {
       statusTaskId: statusTask2.id,
       creatorId: creator2.id,
       typeOfTaskId: typeOfTask2.id,
-    },
-  });
-
-  // Create RouteDay
-  const routeDay1 = await prisma.routeDay.create({
-    data: {
-      dateIn: new Date(),
-      isOnlyOne: 1,
-      dateStart: new Date(),
-      dateEnd: new Date(),
-      comment: "Comment 1",
-      isUpdate: 0,
-      routeId: 1,
-      statusRouteDayId: 1,
-      managerId: manager1.id,
-    },
-  });
-
-  const routeDay2 = await prisma.routeDay.create({
-    data: {
-      dateIn: new Date(),
-      isOnlyOne: 0,
-      dateStart: new Date(),
-      dateEnd: new Date(),
-      comment: "Comment 2",
-      isUpdate: 1,
-      routeId: 2,
-      statusRouteDayId: 2,
-      managerId: manager2.id,
-    },
-  });
-
-  // Create Route
-  const route1 = await prisma.route.create({
-    data: {
-      name: "Route 1",
-      dateIn: new Date(),
-      dateEnd: new Date(),
-      managerId: manager1.id,
-      creatorId: creator1.id,
-      isDay1: 1,
-      isDay2: 1,
-      isDay3: 1,
-      isDay4: 1,
-      isDay5: 1,
-      isDay6: 1,
-      isDay7: 1,
-    },
-  });
-
-  const route2 = await prisma.route.create({
-    data: {
-      name: "Route 2",
-      dateIn: new Date(),
-      dateEnd: new Date(),
-      managerId: manager2.id,
-      creatorId: creator2.id,
-      isDay1: 0,
-      isDay2: 0,
-      isDay3: 0,
-      isDay4: 0,
-      isDay5: 0,
-      isDay6: 0,
-      isDay7: 0,
-    },
-  });
-
-  // Create SalesChannel
-  const salesChannel1 = await prisma.salesChannel.create({
-    data: {
-      name: "Sales Channel 1",
-    },
-  });
-
-  const salesChannel2 = await prisma.salesChannel.create({
-    data: {
-      name: "Sales Channel 2",
-    },
-  });
-
-  // Create TradePoint
-  const tradePoint1 = await prisma.tradePoint.create({
-    data: {
-      code: 1,
-      name: "Trade Point 1",
-      dayCredit: 7,
-      sumCredit: 1000,
-      dayCreditSc: 10,
-      sumCreditSc: 2000,
-      dayCreditC: 14,
-      sumCreditC: 3000,
-      address: "Address 1",
-      lat: "123.456",
-      lng: "789.012",
-      addressGeo: "Address Geo 1",
-      lastVisitDate: new Date(),
-      lastDeliveryDate: new Date(),
-      customerId: customer1.id,
-      salesChannelId: salesChannel1.id,
-      managerId: manager1.id,
-    },
-  });
-
-  const tradePoint2 = await prisma.tradePoint.create({
-    data: {
-      code: 2,
-      name: "Trade Point 2",
-      dayCredit: 14,
-      sumCredit: 2000,
-      dayCreditSc: 20,
-      sumCreditSc: 3000,
-      dayCreditC: 30,
-      sumCreditC: 4000,
-      address: "Address 2",
-      lat: "456.789",
-      lng: "012.345",
-      addressGeo: "Address Geo 2",
-      lastVisitDate: new Date(),
-      lastDeliveryDate: new Date(),
-      customerId: customer2.id,
-      salesChannelId: salesChannel2.id,
-      managerId: manager2.id,
     },
   });
 

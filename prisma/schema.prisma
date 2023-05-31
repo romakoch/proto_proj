@@ -10,7 +10,7 @@ datasource db {
 generator typegraphql {
   provider           = "typegraphql-prisma"
   output             = "../prisma/generated/type-graphql"
-  emitTranspiledCode = true
+  // emitTranspiledCode = true
 }
 
 model Manager {
